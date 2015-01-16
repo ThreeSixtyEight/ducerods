@@ -1,18 +1,75 @@
-var canv = document.getElementById('background');
-$(canv)
-  .width($(window).width())
-  .height($(window).height());
+//Hide Main Content
+//content.hide
+
 
 //perload images
 var totalImages = 61; // Wow, so many images for such a short clip
 var images = new Array();
 for(var i = 1; i < totalImages; i++) {
-	var filename = 'rod/rod_0' + ('0' + i).slice(-2) + '.jpg'; // Filename of each image
-	var img = new Image;
-	img.src = filename;
-	images.push(img);
+  var filename = '/ducerods/rod-jpg/rod_0' + ('0' + i).slice(-2) + '.jpg'; // Filename of each image
+  var img = new Image;
+  img.src = filename;
+  images.push(img);
+}
+//test see if last image loaded
+
+// fadein content 
+
+// start playing
+
+//Setup canv
+var canv = document.getElementById('background');
+
+// Redefine canvas size on browser resize 
+$( window ).resize(function(event) {
+  setCanvasSize();
+});
+
+//Set Canvas Size
+function setCanvasSize(){
+  $windowWidth = $(window).width();
+  $windowHeight = $(window).height(); 
+  $(canv)
+      .width($windowWidth)
+      .height($windowWidth / 1.95);
 }
 
+//Set Initial Canvas Size
+setCanvasSize();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+jQuery(function(){
+  currentLocation = 1;
+  
+  var refreshIntervalId = setInterval(function(){
+    context.clearRect(0, 0, canv.width, canv.height);
+    setImage(currentLocation);	
+  	currentLocation = currentLocation + 1;   
+  	console.log(currentLocation);
+  	if(currentLocation == '60'){
+    	console.log('here');
+    	clearInterval(refreshIntervalId);
+  	}        
+  },50);
+  
+  
+});
+
+/*
 window.addEventListener('mousewheel', function(e) {
   e.preventDefault(); // No scroll
  
@@ -28,8 +85,15 @@ window.addEventListener('mousewheel', function(e) {
     currentLocation = images.length;
  
   // See below for the details of this function
+ 
+  context.clearRect(0, 0, canv.width, canv.height);
+  
   setImage(currentLocation);
+    
+ 
+
 });
+*/
 
 
 var context = canv.getContext('2d');
@@ -41,11 +105,15 @@ function setImage(newLocation) {
 }
 
 var currentMousePos = false;
+/*
 window.addEventListener('mousemove', function(e) {
   currentMousePos = e.x;
   currentLocation = Math.floor(
     (images.length / $(window).width()) *
     currentMousePos
   );
+  context.clearRect(0, 0, canv.width, canv.height);
   setImage(currentLocation);
+  
 });
+*/

@@ -21,6 +21,7 @@ textarea {
 html {
     font-size: 1em;
     line-height: 1.4;
+    background: #000;
 }
 
 /*
@@ -97,7 +98,10 @@ textarea {
    Author's custom styles
    ========================================================================== */
 
-
+.canvas_wrapper{
+    text-align: center;
+    width: 100%;
+}
 
 
 
