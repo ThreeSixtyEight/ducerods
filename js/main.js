@@ -34,9 +34,7 @@ function rodIntro() {
     context.clearRect(0, 0, canv.width, canv.height);
     setImage(currentLocation);  
     currentLocation = currentLocation + 1;   
-    // console.log(currentLocation);
     if(currentLocation == '121'){
-      // console.log('here');
       $( '#content' ).fadeIn();
       $( '.load_1' ).fadeIn(700);
       $( '.load_2' ).delay(1000).fadeIn(700);
@@ -52,12 +50,9 @@ function getNextStop(currLocation, direction) {
     // Find which current sequence we are in by looping 
     // through start and finish frames 
     for(var index = 1; index < seqStart.length; ++index){
-      console.log('GNS Index: '+ index);
       // If the current location is in between the start and finish frame
       // return the next frame end
-      console.log(parseInt(seqStart[index]) + ' <= ' + parseInt(currLocation) + ' <= ' + parseInt(seqFinish[index]));
       if(seqStart[index].valueOf() <= currLocation.valueOf() &&  currLocation.valueOf() <= seqFinish[index].valueOf()) {
-        console.log('SeqFound: ' + index);
         // if scroll is up
         if(direction == 1){
           
@@ -89,7 +84,6 @@ function getNextStop(currLocation, direction) {
 
 // Animate Frames from Start to Finish
 function animateFrames(start, finish, direction){
-  console.log(currentLocation + '=' + finish);
   var refreshIntervalId = setInterval(function(){
 
     // clear the previous photo
@@ -100,21 +94,20 @@ function animateFrames(start, finish, direction){
     // 1 for scroll down or -1 for a scroll up 
     if(direction == 1){
       currentLocation = currentLocation - 1;
+      // stop when current location equals finish
       if(parseInt(currentLocation) < parseInt(finish)){
         clearInterval(refreshIntervalId);
         inAnimation = false;
       }  
     } else {
       currentLocation = currentLocation + 1; 
+      // stop when current location equals finish
       if(parseInt(currentLocation) >= parseInt(finish)){
         clearInterval(refreshIntervalId);
         inAnimation = false;
       } 
     } 
 
-    console.log(currentLocation, direction);
-    console.log(currentLocation + '=' + finish);
-    // stop when current location equals finish
            
   },35);
 };
@@ -170,7 +163,6 @@ window.addEventListener('mousewheel', function(e) {
     // find the next stopping piont frame based on the current 
     // location and scroll direction
     var nextStop = getNextStop(currentLocation, delta);
-    console.log('Nextstop: '+ nextStop);
     // animate frames
     if(nextStop != false) {
       animateFrames(currentLocation, nextStop, delta);
