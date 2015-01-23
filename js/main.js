@@ -1,55 +1,25 @@
-
+//Initiate Variables
 
 var inAnimation = false;
 var currentLocation = 1;
-var seq1Start = 1;
-var seq1Finish = 121;
-var seq2Start = 122;
-var seq2Finish = 242;
-var seq3Start = 243;
-var seq3Finish = 362;
-var seq4Start = 363;
-var seq4Finish = 482;
-var seq5Start = 483;
-var seq5Finish = 546;
-var seq6Start = 547;
-var seq6Finish = 656;
-var seq7Start = 657;
-var seq7Finish = 777;
-var seq8Start = 778;
-var seq8Finish = 869;
-var seq9Start = 870;
-var seq9Finish = 1019;
-// var refreshIntervalId = null;
 
-//Hide Main Content
-//content.hide
-   $( '.canvas_wrapper' ).hide();
-//perload images
-  var totalImages = 1019; // Wow, so many images for such a short clip
-  var images = new Array();
-  for(var i = 1; i <= totalImages; i++) {
-    var filename = '/ducerodsGIT/rod-jpg/rod_' + ('000' + i).slice(-4) + '.jpg'; // Filename of each image
-    var img = new Image;
-    if ( i == 500) {
-      img.onload = function() {
-        setTimeout(function(){ 
-          $( '.loader' ).fadeOut(150);
-          $( '.canvas_wrapper' ).delay(550).fadeIn();
-          rodIntro();
-        }, 4000);
-      };
-    }
-    img.src = filename;
-    images.push(img);
-  }
-//Setup canv
+var totalImages = 1019; 
+var images = new Array();
+
+var seqStart = [0, 1, 122,243,363,483,547,657,778,870];
+var seqFinish = [0,121,242,362,482,546,656,777,869,1019];
+
+// Setup canv
 var canv = document.getElementById('background');
-// Redefine canvas size on browser resize 
-$( window ).resize(function(event) {
-  setCanvasSize();
-});
-//Set Canvas Size
+var context = canv.getContext('2d');
+
+
+
+// -------------------------
+// Defind Function
+// -------------------------
+
+// Set Canvas size based on browser width
 function setCanvasSize(){
   $windowWidth = $(window).width();
   $windowHeight = $(window).height(); 
@@ -57,79 +27,68 @@ function setCanvasSize(){
       .width($windowWidth)
       .height($windowWidth / 1.95);
 }
-//Set Initial Canvas Size
-setCanvasSize();
-//Rod animate through images
+
+//Rod Introduction animate through images
 function rodIntro() {
   var refreshIntervalId = setInterval(function(){
     context.clearRect(0, 0, canv.width, canv.height);
-    setImage(currentLocation);	
-  	currentLocation = currentLocation + 1;   
-  	// console.log(currentLocation);
-  	if(currentLocation == '121'){
-    	// console.log('here');
+    setImage(currentLocation);  
+    currentLocation = currentLocation + 1;   
+    // console.log(currentLocation);
+    if(currentLocation == '121'){
+      // console.log('here');
       $( '#content' ).fadeIn();
       $( '.load_1' ).fadeIn(700);
       $( '.load_2' ).delay(1000).fadeIn(700);
       $( '.load_3' ).delay(2500).fadeIn(700);
-    	clearInterval(refreshIntervalId);
-  	}        
+      clearInterval(refreshIntervalId);
+    }        
   },35);
 }
 
-
-
-
+// Get Next Sequence
 function getNextStop(currLocation, direction) {
-  // if scroll is up
-  if(direction == 1) {
-    if(seq1Start <= currLocation <= seq1Finish)
-      return false;
-    else if(seq2Start <= currLocation <= seq2Finish) 
-      return seq1Finish;
-    else if(seq3Start <= currLocation <= seq3Finish) 
-      return seq2Finish;
-    else if(seq4Start <= currLocation <= seq4Finish) 
-      return seq3Finish;
-    else if(seq5Start <= currLocation <= seq5Finish) 
-      return seq4Finish;
-    else if(seq6Start <= currLocation <= seq6Finish) 
-      return seq5Finish;
-    else if(seq7Start <= currLocation <= seq7Finish) 
-      return seq6Finish;
-    else if(seq8Start <= currLocation <= seq8Finish) 
-      return seq7Finish;
-    else if(seq9Start <= currLocation <= seq9Finish) 
-      return seq8Finish;
-    else 
-      return false;
-  }
-  // if scoll is down 
-  else {
-    if(seq1Start <= currLocation <= seq1Finish)
-      return seq2Finish;
-    else if(seq2Start <= currLocation <= seq2Finish) 
-      return seq3Finish;
-    else if(seq3Start <= currLocation <= seq3Finish) 
-      return seq4Finish;
-    else if(seq4Start <= currLocation <= seq4Finish) 
-      return seq5Finish;
-    else if(seq5Start <= currLocation <= seq5Finish) 
-      return seq6Finish;
-    else if(seq6Start <= currLocation <= seq6Finish) 
-      return seq7Finish;
-    else if(seq7Start <= currLocation <= seq7Finish) 
-      return seq8Finish;
-    else if(seq8Start <= currLocation <= seq8Finish) 
-      return seq9Finish;
-    else if(seq9Start <= currLocation <= seq9Finish) 
-      return false;
-    else 
-      return false;
-  }
+  
+    // Find which current sequence we are in by looping 
+    // through start and finish frames 
+    for(var index = 1; index < seqStart.length; ++index){
+      console.log('GNS Index: '+ index);
+      // If the current location is in between the start and finish frame
+      // return the next frame end
+      console.log(parseInt(seqStart[index]) + ' <= ' + parseInt(currLocation) + ' <= ' + parseInt(seqFinish[index]));
+      if(seqStart[index].valueOf() <= currLocation.valueOf() &&  currLocation.valueOf() <= seqFinish[index].valueOf()) {
+        console.log('SeqFound: ' + index);
+        // if scroll is up
+        if(direction == 1){
+          
+          if(index ==1){
+            //Return false if index is 1
+            return false;
+          } else {
+            //Return previous sequence finish to animate back too
+            return seqFinish[index-1];
+          }
+        
+        } else {
+          
+          if(index >= seqStart.length -1){
+            //Return false if index is last frame
+            return false;
+          } else {
+            //Return previous sequence finish to animate back too
+            return seqFinish[index+1];
+          }
+
+        }
+  
+      } 
+    }
+    //Return false if currentlLocation is out of bounds
+    return false;
 } 
 
-function animateFrames(start, finish){
+// Animate Frames from Start to Finish
+function animateFrames(start, finish, direction){
   console.log(currentLocation + '=' + finish);
   var refreshIntervalId = setInterval(function(){
 
@@ -137,52 +96,95 @@ function animateFrames(start, finish){
     context.clearRect(0, 0, canv.width, canv.height);
     // draw next photo
     setImage(currentLocation);
-    // add 1 to current location  
-    currentLocation = currentLocation + 1; 
+    // add or subtract 1 to current location 
+    // 1 for scroll down or -1 for a scroll up 
+    if(direction == 1){
+      currentLocation = currentLocation - 1;
+      if(parseInt(currentLocation) < parseInt(finish)){
+        clearInterval(refreshIntervalId);
+        inAnimation = false;
+      }  
+    } else {
+      currentLocation = currentLocation + 1; 
+      if(parseInt(currentLocation) >= parseInt(finish)){
+        clearInterval(refreshIntervalId);
+        inAnimation = false;
+      } 
+    } 
+
+    console.log(currentLocation, direction);
     console.log(currentLocation + '=' + finish);
     // stop when current location equals finish
-    if(currentLocation >= finish){
-      clearInterval(refreshIntervalId);
-      inAnimation = false;
-    }        
+           
   },35);
 };
 
+// Draws the current image
+function setImage(newLocation) {
+  // drawImage takes 5 arguments: image, x, y, width, height
+  context.drawImage(images[newLocation], 0, 0, 1280, 720);
+}
+
+// --------------------------
+// Load Sequence 
+// --------------------------
+
+//Hide Main Content
+$( '.canvas_wrapper' ).hide();
+
+//perload images
+for(var i = 1; i <= totalImages; i++) {
+  var filename = '/ducerodsGIT/rod-jpg/rod_' + ('000' + i).slice(-4) + '.jpg'; // Filename of each image
+  var img = new Image;
+  if ( i == 500) {
+    img.onload = function() {
+      setTimeout(function(){ 
+        $( '.loader' ).fadeOut(150);
+        $( '.canvas_wrapper' ).delay(550).fadeIn();
+        rodIntro();
+      }, 4000);
+    };
+  }
+  img.src = filename;
+  images.push(img);
+}
+
+// Redefine canvas size on browser resize 
+$( window ).resize(function(event) {
+  setCanvasSize();
+});
+
+// Set Initial Canvas Size
+setCanvasSize();
+
+// Add Event Listener to mousewheel
 window.addEventListener('mousewheel', function(e) {
-  console.log('inside scroll function');
   if(inAnimation == false) { 
-    console.log('inside animation');
     inAnimation = true;
     e.preventDefault(); // No scroll
 
     // The following equation will return either a 1 for scroll down
     // or -1 for a scroll up
     var delta = Math.max(-1, Math.min(1, e.wheelDelta));
-    console.log(delta);
 
     // find the next stopping piont frame based on the current 
     // location and scroll direction
     var nextStop = getNextStop(currentLocation, delta);
-    console.log(nextStop);
+    console.log('Nextstop: '+ nextStop);
     // animate frames
     if(nextStop != false) {
-      animateFrames(currentLocation, nextStop);
+      animateFrames(currentLocation, nextStop, delta);
+    } else {
+      inAnimation = false;
     }
   }
 });
 
 
 
-var context = canv.getContext('2d');
- 
-// See above for where this gets called
-function setImage(newLocation) {
-  // drawImage takes 5 arguments: image, x, y, width, height
-  context.drawImage(images[newLocation], 0, 0, 1280, 720);
-}
 
-var currentMousePos = false;
-/*
+/*var currentMousePos = false;
+
 window.addEventListener('mousemove', function(e) {
   currentMousePos = e.x;
   currentLocation = Math.floor(
