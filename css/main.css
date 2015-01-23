@@ -22,6 +22,7 @@ html {
     font-size: 1em;
     line-height: 1.4;
     background: #000;
+    overflow: hidden;
 }
 
 /*
@@ -98,23 +99,331 @@ textarea {
    Author's custom styles
    ========================================================================== */
 
+
+/* ==========================================================================
+   Page Loader
+   ========================================================================== */
+
+.loader {
+  margin: 16% auto 0;
+  font-size: 10px;
+  color: #F96A00;
+  width: 60%;
+  position: relative;
+}
+.loader img {
+    width: 100%;
+}
+
+.showHide1,
+.showHide2,
+.showHide3,
+.showHide4 {
+    position:absolute;
+    top:0; bottom:0; right:0;
+    width:100%;
+    /*height: 144px;*/
+    opacity: 0;
+    -moz-animation: showHide 1.8s ease-in-out alternate infinite; /* Firefox */
+    -webkit-animation: showHide 1.8s ease-in-out alternate infinite; /* Safari and Chrome */
+    -ms-animation: showHide 1.8s ease-in-out alternate infinite; /* IE10 */
+    -o-animation: showHide 1.8s ease-in-out alternate infinite; /* Opera */
+    animation: showHide 1.8s ease-in-out alternate infinite;
+    -moz-animation-delay: .5s;
+    -webkit-animation-delay: .5s;
+    -ms-animation-delay: .5s;
+    -o-animation-delay: .5s;
+    animation-delay: .5s;
+    
+}
+.showHide2 {
+    -moz-animation-delay: .6s;
+    -webkit-animation-delay: .6s;
+    -ms-animation-delay: .6s;
+    -o-animation-delay: .6s;
+    animation-delay: .6s;
+}
+.showHide3 {
+    -moz-animation-delay: .7s;
+    -webkit-animation-delay: .7s;
+    -ms-animation-delay: .7s;
+    -o-animation-delay: .7s;
+    animation-delay: .7s;
+}
+.showHide4 {
+    -moz-animation-delay: .8s;
+    -webkit-animation-delay: .8s;
+    -ms-animation-delay: .8s;
+    -o-animation-delay: .8s;
+    animation-delay: .8s;
+}
+@-webkit-keyframes showHide { /* Chrome, Safari */
+    0% {opacity: 0;}
+    12.5% {opacity: .25;}
+    25% {opacity: .5;}
+    37.5% {opacity: .75;}
+    50% {opacity: 1;}
+    62.5% {opacity: .75;}
+    75% {opacity: .5;}
+    87.5% {opacity: .25;}
+    100% {opacity: 0;}
+}
+@-moz-keyframes showHide { /* FF */
+    0% {opacity: 0;}
+    12.5% {opacity: .25;}
+    25% {opacity: .5;}
+    37.5% {opacity: .75;}
+    50% {opacity: 1;}
+    62.5% {opacity: .75;}
+    75% {opacity: .5;}
+    87.5% {opacity: .25;}
+    100% {opacity: 0;}
+}
+@-ms-keyframes showHide { /* IE10 */
+    0% {opacity: 0;}
+    12.5% {opacity: .25;}
+    25% {opacity: .5;}
+    37.5% {opacity: .75;}
+    50% {opacity: 1;}
+    62.5% {opacity: .75;}
+    75% {opacity: .5;}
+    87.5% {opacity: .25;}
+    100% {opacity: 0;}
+}
+@-o-keyframes showHide { /* Opera */
+    0% {opacity: 0;}
+    12.5% {opacity: .25;}
+    25% {opacity: .5;}
+    37.5% {opacity: .75;}
+    50% {opacity: 1;}
+    62.5% {opacity: .75;}
+    75% {opacity: .5;}
+    87.5% {opacity: .25;}
+    100% {opacity: 0;}
+}
+@keyframes showHide {
+    0% {opacity: 0;}
+    12.5% {opacity: .25;}
+    25% {opacity: .5;}
+    37.5% {opacity: .75;}
+    50% {opacity: 1;}
+    62.5% {opacity: .75;}
+    75% {opacity: .5;}
+    87.5% {opacity: .25;}
+    100% {opacity: 0;}
+}
+
+/* ==========================================================================
+   END Page Loader
+   ========================================================================== */
+   
 .canvas_wrapper{
     text-align: center;
     width: 100%;
+    z-index: 1;
+    margin-top: -30px;
+}
+#logo {
+    display: none;
+    height: 40px;
+    width: 120px;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+#logo img {
+    width: 100%;
+    
+}
+#content {
+    display: none;
+    text-align: center;
+    width: 90%;
+    padding: 0% 0 8%;
+    margin: 0 auto;
+    margin-top: -28%;
+    position: relative;
+    z-index: 15;
+}
+h1 {
+    font-size: 2.5em;
+    font-family: "Oswald", "sans-serif";
+    margin-top: 120px;
+    letter-spacing: 4px;
+    display: none;
+}
+h1.load_1 {
+    color: #FFF;
+} 
+h1.load_2 {
+    color: #F96A00;
+    margin-top: -50px;
+} 
+p {
+    color: rgba(255,255,255,.85);
+    font-weight: 300;
+    font-size: 1em;
+    letter-spacing: 2px;
+    font-family: "Oswald", "sans-serif";
+    margin-top: 150px;
+    margin-bottom: 0;
+    display: none;
+}
+p.fa-angle-down {
+    margin-top: 0;
+    font-size: 2em;
+    display: none;
+}
+span.bold {
+    font-weight: 500;
+    color: rgba(255,255,255,1);
+}
+a.btn_link {
+ display: none;   
+}
+button {
+    display: none;
+    border: 2px solid #fff;
+    background: transparent;
+    color: #fff;
+    font-family: "Oswald", "sans-serif";
+    font-size: 1.3em;
+    padding: 10px 40px;
+    margin-top: 10px;
+    letter-spacing: 3px;
+    font-weight: 300;
+    box-shadow: inset 0 0 0 0 #fff;
+    -webkit-transition: all .4s ease;
+       -moz-transition: all .4s ease;
+        -ms-transition: all .4s ease;
+         -o-transition: all .4s ease;
+            transition: all .4s ease;
+}
+button:hover {
+    box-shadow: inset 0 -100px 0 0 #fff;
+    color: #F96A00;
+}
+
+/* ==========================================================================
+   MEDIA QUERIES
+   ========================================================================== */
+
+/*ipad landscape*/
+@media (max-width: 1024px) {
+    #content {
+        padding-bottom: 3%;
+        width: 80%;
+    }
+}
+
+@media (max-width: 1557px) {
+    
+}
+
+/*ipad portait*/
+@media (max-width: 768px) {
+    #content {
+        width: 100%;
+        /*padding-bottom: 12%;*/
+    }
+    p {
+        max-width: 600px;
+    }
+}
+
+/*iphone 6plus landscape*/
+@media (max-width: 736px) {
+    .canvas_wrapper {
+        margin-top: -30px;
+    }
+    #content {
+        display: none;
+        margin-top: -34%;
+    }
+    h1 {
+        font-size: 1.5em;
+    }
+    p {
+        font-size: 1em;
+        line-height: 1.5em;
+    }
+    button {
+        font-size: 1.1em;
+        padding: 6px 30px;
+    }
+}
+
+
+/*iphone 6 landscape*/
+@media (max-width: 667px) {
+    .canvas_wrapper {
+        margin-top: -35px;
+    }
+}
+
+
+/*iphone 5 landscape*/
+@media (max-width: 568px) {
+    .dummy{}
+    h1 {
+        margin-top: 75px;
+    }
+    p {
+        max-width: 386px;
+    }
 }
 
 
 
+/*iphone 6plus portrait*/
+@media (max-width: 414px) {
+    #logo {
+        height: 30px;
+        width: 100px;
+        top: 15px;
+        left: 15px;
+    }
+    .canvas_wrapper {
+        margin-top: 0px;
+    }
+    h1 {
+        max-width: 220px;
+        margin: 100px auto 10px;
+    }
+    p {
+        max-width: 345px;
+        font-size: 1.1em;
+    }
+}
 
+/*iphone 6 portrait*/
+@media (max-width: 375px) {
+    #logo {
+        height: 30px;
+        width: 85px;
+        top: 10px;
+        left: 10px;
+    }
+    p {
+        max-width: 325px;
+    }
+}
 
-
-
-
-
-
-
-
-
+/*iphone 5 portrait*/
+@media (max-width: 320px) {
+    .bg_img {
+        height: 400px;
+    }
+    .content {
+        margin-top: -530px;
+    }
+    p {
+        max-width: 275px;
+    }
+}
+/* ==========================================================================
+   END MEDIA QUERIES
+   ========================================================================== */
 
 
 /* ==========================================================================
@@ -306,3 +615,8 @@ textarea {
         page-break-after: avoid;
     }
 }
+
+
+
+
+
