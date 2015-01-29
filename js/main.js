@@ -34,11 +34,12 @@ function rodIntro() {
     context.clearRect(0, 0, canv.width, canv.height);
     setImage(currentLocation);  
     currentLocation = currentLocation + 1;   
-    if(currentLocation == '121'){
+    if(currentLocation == seqFinish[1]){
       $( '#content' ).fadeIn();
-      $( '.load_1' ).fadeIn(700);
-      $( '.load_2' ).delay(1000).fadeIn(700);
-      $( '.load_3' ).delay(2500).fadeIn(700);
+      $( '#section_1' ).fadeIn();
+      $( '#section_1 .load_1' ).fadeIn(700);
+      $( '#section_1 .load_2' ).delay(1000).fadeIn(700);
+      $( '#section_1 .load_3' ).delay(2500).fadeIn(700);
       clearInterval(refreshIntervalId);
     }        
   },35);
@@ -56,12 +57,12 @@ function getNextStop(currLocation, direction) {
         // if scroll is up
         if(direction == 1){
           
-          if(index ==1){
+          if(index == 1){
             //Return false if index is 1
             return false;
           } else {
-            //Return previous sequence finish to animate back too
-            return seqFinish[index-1];
+            //Return previous sequence 
+            return index-1;
           }
         
         } else {
@@ -70,8 +71,8 @@ function getNextStop(currLocation, direction) {
             //Return false if index is last frame
             return false;
           } else {
-            //Return previous sequence finish to animate back too
-            return seqFinish[index+1];
+            //Return next sequence 
+            return index+1;
           }
 
         }
@@ -83,7 +84,7 @@ function getNextStop(currLocation, direction) {
 } 
 
 // Animate Frames from Start to Finish
-function animateFrames(start, finish, direction){
+function animateFrames(start, finish, direction, frameIndex){
   var refreshIntervalId = setInterval(function(){
 
     // clear the previous photo
@@ -93,23 +94,35 @@ function animateFrames(start, finish, direction){
     // add or subtract 1 to current location 
     // 1 for scroll down or -1 for a scroll up 
     if(direction == 1){
+      $( 'section' ).fadeOut();
       currentLocation = currentLocation - 1;
       // stop when current location equals finish
       if(parseInt(currentLocation) < parseInt(finish)){
         clearInterval(refreshIntervalId);
+        $( '#section_' + frameIndex ).fadeIn();
+        $( '#section_' + frameIndex + ' .load_1, #section_' + frameIndex + ' .load_2, #section_' + frameIndex + ' .load_3' ).fadeIn();
         inAnimation = false;
       }  
     } else {
       currentLocation = currentLocation + 1; 
+      $( 'section' ).fadeOut();
       // stop when current location equals finish
       if(parseInt(currentLocation) >= parseInt(finish)){
         clearInterval(refreshIntervalId);
         inAnimation = false;
+        $( '#section_' + frameIndex ).show();
+        $( '#section_' + frameIndex + ' .load_1' ).fadeIn(700);
+        $( '#section_' + frameIndex + ' .load_2' ).delay(1000).fadeIn(700);
+        $( '#section_' + frameIndex + ' .load_3' ).delay(2500).fadeIn(700);
       } 
     } 
 
            
   },35);
+};
+
+function animateText(frameIndex) {
+    
 };
 
 // Draws the current image
@@ -162,15 +175,25 @@ window.addEventListener('mousewheel', function(e) {
 
     // find the next stopping piont frame based on the current 
     // location and scroll direction
-    var nextStop = getNextStop(currentLocation, delta);
+    var goToIndex = getNextStop(currentLocation, delta);
     // animate frames
-    if(nextStop != false) {
-      animateFrames(currentLocation, nextStop, delta);
+    if(goToIndex != false) {
+      animateFrames(currentLocation, seqFinish[goToIndex], delta, goToIndex);
     } else {
       inAnimation = false;
     }
   }
 });
+
+
+
+
+
+
+
+
+
+
 
 
 
